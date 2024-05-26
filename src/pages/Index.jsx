@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Box, Container, Flex, Heading, Link, Stack, Text, VStack, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, FormControl, FormLabel, Input, Textarea, useDisclosure, Image } from "@chakra-ui/react";
-import { FaTwitter, FaFacebook, FaInstagram } from "react-icons/fa";
+import { Box, Container, Flex, Heading, Link, Stack, Text, VStack, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton, FormControl, FormLabel, Input, Textarea, useDisclosure, Image, useColorMode } from "@chakra-ui/react";
+import { FaTwitter, FaFacebook, FaInstagram, FaSun, FaMoon } from "react-icons/fa";
 
 const posts = [
   {
@@ -24,6 +24,7 @@ const Index = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [newPost, setNewPost] = useState({ title: "", content: "", image: "" });
   const [postList, setPostList] = useState(posts);
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -38,13 +39,16 @@ const Index = () => {
 
   return (
     <Container maxW="container.xl" p={4}>
-      <Flex as="nav" bg="gray.100" p={4} mb={8} justifyContent="space-between" alignItems="center">
+      <Flex as="nav" bg={colorMode === "light" ? "gray.100" : "gray.900"} p={4} mb={8} justifyContent="space-between" alignItems="center">
         <Heading as="h1" size="lg">My Blog</Heading>
-        <Stack direction="row" spacing={4}>
+        <Stack direction="row" spacing={4} align="center">
           <Link href="/">Home</Link>
           <Link href="/about">About</Link>
           <Link href="/blog">Blog</Link>
           <Link href="/contact">Contact</Link>
+          <Button onClick={toggleColorMode}>
+            {colorMode === "light" ? <FaMoon /> : <FaSun />}
+          </Button>
           <Button colorScheme="teal" onClick={onOpen}>New Post</Button>
         </Stack>
       </Flex>
@@ -53,7 +57,7 @@ const Index = () => {
         <Box flex="3">
           <VStack spacing={8} align="stretch">
             {postList.map((post, index) => (
-              <Box key={index} p={5} shadow="md" borderWidth="1px">
+              <Box key={index} p={5} shadow="md" borderWidth="1px" bg={colorMode === "light" ? "white" : "gray.700"}>
                 <Heading fontSize="xl">{post.title}</Heading>
                 <Text mt={4}>{post.content}</Text>
                 {post.image && <Image src={post.image} alt={post.title} mt={4} />}
